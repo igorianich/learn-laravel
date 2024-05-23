@@ -2,29 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(UserRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+        $validated = $request->validated();
+        $user = User::create($validated);
+        return (new UserResource($user))->response()->setStatusCode(201);
+    }
+
+    public function login(Request $request): JsonResponse
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
-
-//        dd ($validated);
-
-
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
-            'role' => 'user'
-        ]);
-
-        return response()->json(['user' => $user], 201);
+        if (!auth()->attempt($credentials)) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        $user = $request->user();
+        $token = $user->createToken('authToken')->plainTextToken;
+        return response()->json(['token' => $token]);
     }
 }
