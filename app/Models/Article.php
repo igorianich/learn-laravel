@@ -17,9 +17,11 @@ class Article extends Model
         'status',
         'slug'
     ];
+    //TODO: add image stuff
 
     protected $casts = [
-        'status' => ArticleStatus::class
+        'status' => ArticleStatus::class,
+        'published_at' => 'datetime'
     ];
 
 

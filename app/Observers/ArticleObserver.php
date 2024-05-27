@@ -9,20 +9,13 @@ class ArticleObserver
 {
     public function creating(Article $article): void
     {
-        $slug = Str::slug($article->title);
-        $slug .= '-' . now()->timestamp;
-        $article->slug = $slug;
+        $article->slug = Str::slug($article->title) . '-' . time();
     }
 
-    public function updated(Article $article): void
+    public function updating(Article $article): void
     {
-        if ($article->status === 'published' && $article->isDirty('status')) {
+        if ($article->status->isPublished() && $article->isDirty('status')) {
             $article->published_at = now();
-            $article->save();
         }
-    }
-
-    public function deleted(Article $article): void
-    {
     }
 }

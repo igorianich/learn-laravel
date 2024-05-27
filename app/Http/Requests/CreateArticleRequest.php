@@ -9,8 +9,8 @@ class CreateArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
-            'text' => 'required|string',
+            'title' => 'required|string|max:100',
+            'text' => 'required|string|max:10000',
             'image' => 'nullable|image',
         ];
     }
