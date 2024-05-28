@@ -21,7 +21,7 @@ class Article extends Model
 
     protected $casts = [
         'status' => ArticleStatus::class,
-        'published_at' => 'datetime'
+        'published_at' => 'datetime',
     ];
 
 

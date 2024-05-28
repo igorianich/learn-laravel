@@ -20,4 +20,15 @@ class UserResource extends JsonResource
             'updated_at' => $this->updated_at,
         ];
     }
+
+    public static function withToken(User $user): UserResource
+    {
+        $token = $user->createToken('authToken');
+        return self::make($user)->additional([
+                'token' => [
+                    'access_token' => $token->plainTextToken,
+                    'token_type' => 'bearer',
+                ],
+        ]);
+    }
 }

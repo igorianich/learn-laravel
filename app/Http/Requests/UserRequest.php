@@ -10,8 +10,8 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
+            'name' => 'required|string|between:5,100',
+            'email' => 'required|email|unique:users,email|between:5,100',
             'password' => ['required','string',Password::min(8)->max(60)->letters()->numbers()->symbols()]
         ];
     }

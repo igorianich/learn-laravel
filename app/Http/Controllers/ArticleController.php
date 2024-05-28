@@ -14,9 +14,12 @@ class ArticleController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
-        $page = $request->input('page', 1);
+        $validated = $request->validate([
+            'per_page' => 'integer|min:1|max:100',
+        ]);
+        $perPage = $validated['per_page'] ?? 10;
 
-        return ArticleResource::collection(Article::with('user')->paginate(10, ['*'], 'page', $page));
+        return ArticleResource::collection(Article::with('user')->paginate($perPage));
     }
 
     public function show(Article $article): ArticleResource

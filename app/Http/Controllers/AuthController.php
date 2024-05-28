@@ -13,7 +13,10 @@ class AuthController extends Controller
     public function register(UserRequest $request): JsonResponse
     {
         $user = User::create($request->validated());
-        return (new UserResource($user))->response()->setStatusCode(201);
+
+        return (new UserResource($user))
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function login(Request $request): JsonResponse
@@ -25,6 +28,7 @@ class AuthController extends Controller
         if (!auth()->attempt($credentials)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-        return response()->json(['token' => $request->user()->createToken('authToken')->plainTextToken]);
+
+        return UserResource::withToken($request->user())->response();
     }
 }
