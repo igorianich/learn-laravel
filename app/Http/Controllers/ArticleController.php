@@ -37,6 +37,8 @@ class ArticleController extends Controller
 
     public function update(UpdateArticleRequest $request, Article $article): ArticleResource
     {
+        $this->authorize('update', $article);
+
         $article->update($request->validated());
 
         return new ArticleResource($article);
