@@ -43,4 +43,13 @@ class ArticleController extends Controller
 
         return new ArticleResource($article);
     }
+
+    public function destroy(Article $article): JsonResponse
+    {
+        $this->authorize('delete', $article);
+
+        $article->delete();
+
+        return response()->json(null, 204);
+    }
 }
