@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ArticleStatus;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Builders\ArticleBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -28,5 +28,10 @@ class Article extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function newEloquentBuilder($query): ArticleBuilder
+    {
+        return new ArticleBuilder($query);
     }
 }

@@ -23,4 +23,9 @@ class ArticlePolicy
     {
         return $user->id === $article->user_id;
     }
+
+    public function view(User $user, Article $article): bool
+    {
+        return $article->status !== 'draft' || $user->id === $article->user_id;
+    }
 }
