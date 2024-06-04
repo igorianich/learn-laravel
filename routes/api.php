@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MyArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('articles', ArticleController::class);
+    Route::apiResource('my-articles', MyArticleController::class);
+    Route::apiResource('articles', ArticleController::class)->only(['index', 'show']);
+    Route::prefix('me')->group(function () {
+        Route::get('');
+        Route::apiResource('articles', MyArticleController::class);
+    });
 });

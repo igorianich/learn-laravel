@@ -19,25 +19,13 @@ class ArticleController extends Controller
         ]);
 
         return ArticleResource::collection(Article::with('user')
+            ->isPublished(true)
             ->paginate($request->input('per_page',10)));
     }
 
     public function show(Article $article): ArticleResource
     {
-        return new ArticleResource($article);
-
-    }
-
-    public function store(CreateArticleRequest $request): JsonResponse
-    {
-        $article = $request->user()->articles()->create($request->validated());
-
-        return (new ArticleResource($article->fresh()))->response()->setStatusCode(201);
-    }
-
-    public function update(UpdateArticleRequest $request, Article $article): ArticleResource
-    {
-        $article->update($request->validated());
+        $this->authorize('view', $article);
 
         return new ArticleResource($article);
     }
