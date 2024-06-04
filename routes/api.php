@@ -26,5 +26,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('my-articles', MyArticleController::class);
     Route::apiResource('articles', ArticleController::class)->only(['index', 'show']);
-
+    Route::prefix('me')->group(function () {
+        Route::get('');
+        Route::apiResource('articles', MyArticleController::class);
+    });
 });

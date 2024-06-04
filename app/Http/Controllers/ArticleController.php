@@ -19,7 +19,7 @@ class ArticleController extends Controller
         ]);
 
         return ArticleResource::collection(Article::with('user')
-            ->where('status','published')
+            ->isPublished(true)
             ->paginate($request->input('per_page',10)));
     }
 

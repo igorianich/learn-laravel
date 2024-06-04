@@ -9,6 +9,7 @@ use App\Models\Article;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class MyArticleController extends Controller
 {
@@ -27,7 +28,8 @@ class MyArticleController extends Controller
 
         return ArticleResource::collection(
             $request->user()
-                ->articles()->isPublished($request->input('published'))
+                ->articles()
+                ->isPublished($request->input('published'))
                 ->paginate($request->input('per_page', 10))
         );
     }
@@ -48,12 +50,12 @@ class MyArticleController extends Controller
         return new ArticleResource($article);
     }
 
-    public function destroy(Article $article): JsonResponse
+    public function destroy(Article $article): Response
     {
         $this->authorize('delete', $article);
 
         $article->delete();
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }

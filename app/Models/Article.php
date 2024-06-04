@@ -24,14 +24,13 @@ class Article extends Model
         'published_at' => 'datetime',
     ];
 
+    public function newEloquentBuilder($query): ArticleBuilder
+    {
+        return new ArticleBuilder($query);
+    }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function newEloquentBuilder($query): ArticleBuilder
-    {
-        return new ArticleBuilder($query);
     }
 }
